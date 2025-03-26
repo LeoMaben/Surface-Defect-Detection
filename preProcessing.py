@@ -31,8 +31,9 @@ def main():
     images = np.array(defect_images + ok_images, dtype=np.float32) / 255.0
     labels = np.array(defect_labels + ok_labels)
 
-    print('Loading and labelling of images are completed.')
+    X_train, X_test, y_train, y_test = train_test_split(images ,labels, test_size=0.2, stratify=labels, random_state=42)
 
+    print(f"Training samples: {len(X_train)}, Testing samples: {len(X_test)}")
 
 if __name__ == '__main__':
     main()
