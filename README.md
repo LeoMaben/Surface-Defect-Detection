@@ -4,9 +4,9 @@ The goal of this project is to test out the various methods for defect detection
 Main goal is to further my understanding of how the inner working of these models function
 
 ## Roadmap/Plan: 
-- Load and resize the data
-- Perform data augmentation to have more training and testing samples 
-- Split the data into train, test and hold-out set 
+- ~~Load and resize the data~~
+- ~~Perform data augmentation to have more training~~ and testing samples 
+- ~~Split the data into train, test and hold-out~~ set 
 - Perform dimensionality reduction on the dataset used for supervised-learning models 
 - Fit Logistic Regression, Decision Trees and XGBoost models 
 - Create 3 different CNN models:
