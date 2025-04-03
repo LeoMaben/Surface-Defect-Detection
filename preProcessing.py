@@ -24,7 +24,7 @@ def loadImages(folder_path:os.path, label:int):
         img_path = os.path.join(folder_path, file)
         image = cv.imread(img_path)
         if image is not None:
-            image = cv.resize(image, (256, 256))
+            image = cv.resize(image, (128, 128))
             images.append(image)
             labels.append(label)
 
@@ -77,6 +77,8 @@ def checkAugmentedImages(tensor_dataset):
         plt.xlabel(class_label)
     plt.suptitle('Test Images')
     plt.show()
+
+
 
 
 def main():
