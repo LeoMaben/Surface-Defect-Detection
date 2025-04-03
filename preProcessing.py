@@ -31,21 +31,37 @@ def loadImages(folder_path:os.path, label:int):
     return images, labels
 
 
-def imageAugementation(image, label, num_augmentations = 10):
+def loadData(defect_path, ok_path):
+    # Loading images and labelling them
+    defect_images, defect_labels = loadImages(defect_path, 1)
+    ok_images, ok_labels = loadImages(ok_path, 0)
 
+    # Changing to the required np format
+    images = np.array(defect_images + ok_images, dtype=np.float32) / 255.0
+    labels = np.array(defect_labels + ok_labels)
+
+    return images, labels
+
+
+def augmentImage(image):
+    """Apply random augmentations to a single image."""
+    image = tf.image.random_flip_left_right(image)
+    image = tf.image.random_flip_up_down(image)
+    image = tf.image.random_brightness(image, max_delta=0.2)
+    image = tf.image.random_contrast(image, lower=0.8, upper=1.2)
+    return image
+
+def augmentImages(image, label, num_augmentations=10):
+    """Generate augmented images."""
     augmented_images = [image]
+    for _ in range(num_augmentations - 1):  # -1 because the original image is already added
+        augmented_image = augmentImage(image)
+        augmented_images.append(augmented_image)
 
-    for _ in range(num_augmentations):
-        image_aug1 = tf.image.random_flip_left_right(image)
-        image_aug2 = tf.image.random_flip_up_down(image)
-        image_aug3 = tf.image.random_brightness(image, max_delta=0.2)
-        image_aug4 = tf.image.random_contrast(image, lower=0.8, upper=1.2)
+    # Create a dataset of augmented images and corresponding labels
+    augmented_labels = [label] * len(augmented_images)
+    return tf.data.Dataset.from_tensor_slices((augmented_images, augmented_labels))
 
-        augmented_images.extend([image_aug1, image_aug2, image_aug3, image_aug4])
-
-    labels = [label] * len(augmented_images)
-
-    return tf.data.Dataset.from_tensor_slices((augmented_images, labels))
 
 
 def count_labels(tensor_dataset):
@@ -79,6 +95,18 @@ def checkAugmentedImages(tensor_dataset):
     plt.show()
 
 
+def createDataset(images, labels, batch_size=32, num_augmentations=10):
+    """Create a TensorFlow dataset from images and labels with augmentation."""
+    # Convert the images and labels to a tf.data.Dataset
+    dataset = tf.data.Dataset.from_tensor_slices((images, labels))
+
+    # Apply augmentation to each image
+    dataset = dataset.map(lambda image, label: augmentImages(image, label, num_augmentations))
+
+    # Shuffle, batch, and prefetch the dataset for efficient training
+    dataset = dataset.shuffle(buffer_size=1000).batch(batch_size).prefetch(tf.data.AUTOTUNE)
+
+    return dataset
 
 
 def main():
@@ -88,26 +116,15 @@ def main():
     defect_path = os.path.join(image_path, 'def_front')
     ok_path = os.path.join(image_path, 'ok_front')
 
-    # Loading images and labelling them
-    defect_images, defect_labels = loadImages(defect_path, 1)
-    ok_images, ok_labels = loadImages(ok_path, 0)
-
-    # Changing to the required np format
-    images = np.array(defect_images + ok_images, dtype=np.float32) / 255.0
-    labels = np.array(defect_labels + ok_labels)
+    # Loading Data into respective numpy arrays
+    images, labels = loadData(defect_path, ok_path)
 
     X_train, X_test, y_train, y_test = train_test_split(images, labels, test_size=0.2, stratify=labels, random_state=42)
 
     # print(f"Training samples: {len(X_train)}, Testing samples: {len(X_test)}")
 
-    train_ds = tf.data.Dataset.from_tensor_slices((X_train, y_train))
-    test_ds = tf.data.Dataset.from_tensor_slices((X_test, y_test))
+    train_ds = createDataset(X_train, y_train)
 
-    train_ds = train_ds.flat_map(lambda image, label: imageAugementation(image, label))
-    count_labels(train_ds)
-
-    train_ds = train_ds.shuffle(100).batch(32).prefetch(tf.data.AUTOTUNE)
-    test_ds = test_ds.batch(32)
 
 
 if __name__ == '__main__':

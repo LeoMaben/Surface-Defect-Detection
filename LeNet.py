@@ -6,8 +6,8 @@ import os
 import sys
 import numpy as np
 from sklearn.model_selection import train_test_split
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
-from preProcessing import loadImages
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '')))
+from preProcessing import loadImages, loadData, augmentImages, createDataset
 
 
 def plotTrainingHistory(history):
@@ -68,23 +68,19 @@ def main():
     print('Loading of data should take place here: ')
 
     # Paths to source folders
-    source_folder = '../source_images'
+    source_folder = 'source_images'
     defect_path = os.path.join(source_folder, 'def_front')
     ok_path = os.path.join(source_folder, 'ok_front')
 
     # Loading images and labelling them
-    defect_images, defect_labels = loadImages(defect_path, 1)
-    ok_images, ok_labels = loadImages(ok_path, 0)
-
-    # Changing to the required np format
-    images = np.array(defect_images + ok_images, dtype=np.float32) / 255.0
-    labels = np.array(defect_labels + ok_labels)
+    images, labels = loadData(defect_path, ok_path)
 
     X_train, X_test, y_train, y_test = train_test_split(images, labels, test_size=0.2, stratify=labels, random_state=42)
 
     model = buildLeNet()
 
     history = model.fit(X_train, y_train, epochs=50, batch_size=32, validation_data=(X_test, y_test))
+    #history = model.fit(train_ds, epochs=50, validation_data=(X_test, y_test))
 
     test_loss, test_acc = model.evaluate(X_test, y_test)
     print(f"The Accuracy of the LeNet model is : {test_acc}")
