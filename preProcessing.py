@@ -101,7 +101,7 @@ def createDataset(images, labels, batch_size=32, num_augmentations=10):
     dataset = tf.data.Dataset.from_tensor_slices((images, labels))
 
     # Apply augmentation to each image
-    dataset = dataset.map(lambda image, label: augmentImages(image, label, num_augmentations))
+    dataset = dataset.flat_map(lambda image, label: augmentImages(image, label, num_augmentations))
 
     # Shuffle, batch, and prefetch the dataset for efficient training
     dataset = dataset.shuffle(buffer_size=1000).batch(batch_size).prefetch(tf.data.AUTOTUNE)
