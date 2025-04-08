@@ -7,13 +7,14 @@ import tensorflow as tf
 import matplotlib.pyplot as plt
 
 
-def loadImages(folder_path:os.path, label:int):
+def loadImages(folder_path:os.path, label:int, size=(128, 128)):
     """
 
     Loads the images and labels from the source paths
 
     :param folder_path: Path for the images
     :param label: Label indicating if defective (1) or not (0)
+    :param size: Size of the input image after resizing
     :return:
     """
 
@@ -24,17 +25,17 @@ def loadImages(folder_path:os.path, label:int):
         img_path = os.path.join(folder_path, file)
         image = cv.imread(img_path)
         if image is not None:
-            image = cv.resize(image, (128, 128))
+            image = cv.resize(image, size)
             images.append(image)
             labels.append(label)
 
     return images, labels
 
 
-def loadData(defect_path, ok_path):
+def loadData(defect_path, ok_path, size):
     # Loading images and labelling them
-    defect_images, defect_labels = loadImages(defect_path, 1)
-    ok_images, ok_labels = loadImages(ok_path, 0)
+    defect_images, defect_labels = loadImages(defect_path, 1, size)
+    ok_images, ok_labels = loadImages(ok_path, 0, size)
 
     # Changing to the required np format
     images = np.array(defect_images + ok_images, dtype=np.float32) / 255.0
