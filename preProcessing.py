@@ -7,7 +7,7 @@ import tensorflow as tf
 import matplotlib.pyplot as plt
 
 
-def loadImages(folder_path:os.path, label:int, size=(128, 128)):
+def loadImages(folder_path:os.path, label:int, size):
     """
 
     Loads the images and labels from the source paths
