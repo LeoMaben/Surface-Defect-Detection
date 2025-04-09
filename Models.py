@@ -33,7 +33,7 @@ def buildAlexNet(input_shape=(256, 256, 3), num_of_classes = 1):
 
     model = tf.keras.models.Sequential([
         layers.Conv2D(96, kernel_size=11, strides=4, activation='relu', input_shape=input_shape),
-        # layers.BatchNormalization(),
+        layers.BatchNormalization(),
         layers.MaxPooling2D(pool_size=3, strides=2),
         layers.Conv2D(256, kernel_size=5, padding='same', activation='relu'),
         layers.MaxPooling2D(pool_size=3, strides=2),
@@ -49,33 +49,37 @@ def buildAlexNet(input_shape=(256, 256, 3), num_of_classes = 1):
         layers.Dense(num_of_classes, activation='sigmoid')
     ])
 
-    model.compile(optimizer='adam', loss='binary_crossentropy', metrics=['accuracy'])
+    model.compile(optimizer=tf.keras.optimizers.Adam(learning_rate=0.001), loss='binary_crossentropy',
+                  metrics=['accuracy'])
 
     return model
 
 
-
-def buildResNet(input_shape = (256, 256, 3)):
+def buildResNet(input_shape = (256, 256, 3), num_classes=1, unfreeze_from_layers=70):
 
     base_model = ResNet50(weights='imagenet', include_top=False, input_shape=input_shape)
 
     base_model.trainable = False
 
+    for layer in base_model.layers[unfreeze_from_layers:]:
+        layer.trainable = True
+
     model = tf.keras.Sequential([
         base_model,
         layers.GlobalAveragePooling2D(),
-        layers.Dense(512, activation='relu'),
-        # layers.Dropout(0.5),
+        layers.Dense(256, activation='relu'),
+        layers.Dropout(0.5),
         layers.Dense(1, activation='sigmoid')
     ])
 
-    model.compile(optimizer='adam', loss='binary_crossentropy', metrics=['accuracy'])
+    model.compile(optimizer=tf.keras.optimizers.Adam(learning_rate=0.001), loss='binary_crossentropy',
+                  metrics=['accuracy'])
 
     return model
 
 
-def buildCustomResNet(input_shape=(256, 256, 3), num_of_classes=1):
-    inputs = tf.keras.Input(shape=input_shape)
+
+
 
 
 
