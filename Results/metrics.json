@@ -1,0 +1,32 @@
+{
+    "LeNet: No Augmentations": {
+        "final accuracy": 0.807692289352417,
+        "final loss": 0.4344722032546997,
+        "train accuracy": 0.8855769038200378,
+        "validation accuracy": 0.807692289352417
+    },
+    "AlexNet: No Augmentations": {
+        "final accuracy": 0.7807692289352417,
+        "final loss": 0.4118572175502777,
+        "train accuracy": 0.8365384340286255,
+        "validation accuracy": 0.7807692289352417
+    },
+    "AlexNet 256 : No Augmentations": {
+        "final accuracy": 0.6769230961799622,
+        "final loss": 0.61836838722229,
+        "train accuracy": 0.7288461327552795,
+        "validation accuracy": 0.6769230961799622
+    },
+    "Resnet Frozen : No Augmentations": {
+        "final accuracy": 0.7423076629638672,
+        "final loss": 0.5370557904243469,
+        "train accuracy": 0.7365384697914124,
+        "validation accuracy": 0.7423076629638672
+    },
+    "Resnet: No Augmentations": {
+        "final accuracy": 0.8307692408561707,
+        "final loss": 0.37580248713493347,
+        "train accuracy": 0.9365384578704834,
+        "validation accuracy": 0.8307692408561707
+    }
+}
