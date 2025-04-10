@@ -17,7 +17,7 @@ evaluation, and explainability using tools like **Grad-CAM**.
 
 ---
 
-## 🗺️ Roadmap
+## Roadmap
 
 ### Phase 1: Data & Preprocessing
 - [x] Load and resize images from source folders
@@ -42,18 +42,21 @@ evaluation, and explainability using tools like **Grad-CAM**.
   - ROC curve
 - [x] Automate comparisons across models
 
-### ✅ Phase 4: Explainability
+### Phase 4: Explainability
 - [x] Use **Grad-CAM** to visualize decision-making of CNNs
 - [x] Overlay heatmaps on sample defect images for inspection
 ---
 
-## 🧪 Models & Accuracy (Test Set)
+## Models & Accuracy (Test Set)
 
-| Model        | Accuracy | Notes |
-|--------------|----------|-------|
-| **LeNet**    | ~98%     | With data augmentation, L2, EarlyStopping |
-| **ResNet**   | ~75%     | Custom-built lightweight ResNet |
-| **AlexNet**  | ~65%     | Struggled to converge, possible overfitting |
+| Model                             | Accuracy | Notes |
+|-----------------------------------|----------|-------|
+| **LeNet without Augmentation**    | ~x%      | L2, EarlyStopping |
+| **LeNet with Augmentation**       | ~x%      | L2, EarlyStopping |
+| **ResNet without Augmentations**  | ~x%      | Custom-built lightweight ResNet |
+| **ResNet with Augmentations**     | ~x%      | Custom-built lightweight ResNet |
+| **AlexNet without Augmentations** | ~x%      | Struggled to converge, possible overfitting |
+| **AlexNet with Augmentations**    | ~x%      | Struggled to converge, possible overfitting |
 
 ---
 
